@@ -41,6 +41,16 @@ class ATDTestApplication < Origen::Application
     OrigenDocHelpers.generate_model_docs layout: "#{Origen.root}/templates/web/layouts/_basic.html.erb", tab: :model do |d|
       d.page model: $dut
     end
+
+    # First build the program to create a flow model
+    Origen.app.runner.launch action: :program, files: "program/sort1.rb"
+    # Then the documentation for it
+    OrigenDocHelpers.generate_flow_docs layout: "#{Origen.root}/templates/web/layouts/_basic.html.erb", tab: :flows  do |d|
+      d.page flow: :sort1,
+             name: "Sort 1 Flow",
+             target: "default.rb",
+             context: { job: :p1 }
+    end
   end
 
   # An example of how to set application specific LSF parameters
